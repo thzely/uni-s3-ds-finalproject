@@ -1,0 +1,57 @@
+# Arquivos de objetos e cabeçalhos compilados
+*.slo
+*.lo
+*.o
+*.obj
+*.gch
+*.pch
+
+# Arquivos de depuração e linkage
+*.ilk
+*.pdb
+*.dwo
+
+# Bibliotecas compiladas (estáticas e dinâmicas)
+*.so
+*.dylib
+*.dll
+*.so.*
+*.lai
+*.la
+*.a
+*.lib
+
+# Módulos Fortran (comuns em C++ científico)
+*.mod
+*.smod
+
+# Executáveis
+*.exe
+*.out
+*.app
+
+# Diretórios e pastas de Build
+build/
+Build/
+build-*/
+
+# Arquivos gerados pelo CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+install_manifest.txt
+compile_commands.json
+
+# Diretório do gerenciador de pacotes vcpkg
+vcpkg_installed/
+
+# Arquivos temporários e de log
+*.tmp
+*.log
+*.bak
+*.swp
+
+# Cache de testes
+Testing/
+.cache/
