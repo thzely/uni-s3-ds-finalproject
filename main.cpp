@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     cout << "Grafo carregado com sucesso!\n";
     cout << "Vertices unicos : " << g.size()  << "\n";
     cout << "Arestas inseridas: " << g.edges() << "\n";
+    g.printarMenorCaminho("217.85.238.118", "62.155.246.229");
     g.draw();
-
     return 0;
 }
