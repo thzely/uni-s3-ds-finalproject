@@ -10,6 +10,7 @@
 *.ilk
 *.pdb
 *.dwo
+*.dot
 
 # Bibliotecas compiladas (estáticas e dinâmicas)
 *.so

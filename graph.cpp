@@ -241,7 +241,20 @@ namespace graph{
             return total;
           }
 
+          void printarMenorCaminho(const std::string& from, const std::string& to){
+            auto caminho = shortestPath(from, to);
+            if(caminho.empty()){
+              std::cout<< "caminho nao encontrado\n";
+              return; 
+            }
+            for(size_t i=0; i<caminho.size(); i++){
+              std::cout << caminho[i];
+              if(i+1 < caminho.size())
+                std::cout<< " -> ";
+            }
+            std::cout << "\n";
 
+          }
           
     }; // fim da classe digraph
 
