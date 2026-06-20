@@ -15,7 +15,10 @@ void menuFormato(graph::digraph& g, const string& nomeBase, const string& from =
     cout << "Opção: ";
     cin >> formato;
     switch (formato) {
-        case 1: g.draw(); break;
+        case 1:
+            if (from.empty()) g.draw();
+            else g.drawShortestPath(from, to);
+            break;
         case 2:
             if (from.empty()) g.generatePNG(nomeBase);
             else g.generatePNGShortestPath(from, to, nomeBase);
@@ -33,7 +36,7 @@ int main(int argc, char* argv[]) {
 
     string caminhoArquivo = argv[1];
     ifstream traceroute(caminhoArquivo);
-    string nomeBase = filesystem::path(caminhoArquivo).stem().string();
+    string nomeBase = filesystem::path(caminhoArquivo).filename().string();
     if (!traceroute) {
         cerr << "Falha ao abrir o arquivo: " << caminhoArquivo << "\n";
         return 1;
