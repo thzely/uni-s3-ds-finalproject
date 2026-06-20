@@ -340,7 +340,16 @@ namespace graph{
             }
             dot << "}\n";
           }
-
+          
+          void drawShortestPath(const std::string& from, const std::string& to){
+              auto caminho = shortestPath(from, to);
+              if(caminho.empty()){ 
+                std::cout << "Caminho não encontrado!\n"; return; 
+              }
+              export2dot(caminho, "graphED2.dot");
+              std::system("dot -Tx11 graphED2.dot");
+          }
+          
           void generatePNGShortestPath(const std::string& from, const std::string& to, const std::string& filename){
             auto caminho = shortestPath(from, to);
             if(caminho.empty()){ std::cout << "Caminho não encontrado!\n"; return; }
