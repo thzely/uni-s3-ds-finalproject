@@ -1,9 +1,31 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <filesystem>
 #include "graph.cpp"
 
 using namespace std;
+
+void menuFormato(graph::digraph& g, const string& nomeBase, const string& from = "", const string& to = "") {
+    int formato;
+    cout << "\nSelecione o formato de saída do Graphviz: " << endl;
+    cout << "1. Tela" << endl;
+    cout << "2. Imagem (PNG)" << endl;
+    cout << "3. Documento (PDF)" << endl;
+    cout << "Opção: ";
+    cin >> formato;
+    switch (formato) {
+        case 1: g.draw(); break;
+        case 2:
+            if (from.empty()) g.generatePNG(nomeBase);
+            else g.generatePNGShortestPath(from, to, nomeBase);
+            break;
+        case 3:
+            if (from.empty()) g.generatePDF(nomeBase);
+            else g.generatePDFShortestPath(from, to, nomeBase);
+            break;
+    }
+}
 
 int main(int argc, char* argv[]) {
     if (argc != 2)
@@ -11,6 +33,7 @@ int main(int argc, char* argv[]) {
 
     string caminhoArquivo = argv[1];
     ifstream traceroute(caminhoArquivo);
+    string nomeBase = filesystem::path(caminhoArquivo).stem().string();
     if (!traceroute) {
         cerr << "Falha ao abrir o arquivo: " << caminhoArquivo << "\n";
         return 1;
@@ -67,15 +90,13 @@ int main(int argc, char* argv[]) {
         cout << "2. Encontrar menor caminho\n";
         cout << "3. Calcular o diâmetro do grafo\n";
         cout << "4. Identificar roteadores críticos\n";
-        cout << "5. Gerar PDF do grafo\n";
-        cout << "6. Gerar PNG do grafo\n";
         cout << "0. Sair\n";
         cout << "Escolha uma opção: ";
         cin >> opcao;
 
         if(opcao == 1) {
             cout << "\nExibindo grafo:\n";
-            g.draw();
+            menuFormato(g, nomeBase);
         } 
         else if (opcao == 2) {
             string from, to;
@@ -85,6 +106,8 @@ int main(int argc, char* argv[]) {
             cin >> to;
             cout << "\nCaminho: ";
             g.printarMenorCaminho(from, to);
+
+            menuFormato(g, nomeBase, from, to);
         } 
         else if (opcao == 3) {
             int diam = g.diameter();
@@ -92,18 +115,6 @@ int main(int argc, char* argv[]) {
         } 
         else if (opcao == 4) {
             g.getCriticalRouters();
-        } 
-        else if (opcao == 5) {
-            string nomeArquivo;
-            cout << "\nDigite o nome do arquivo: ";
-            cin >> nomeArquivo;
-            g.generatePDF(nomeArquivo);
-        } 
-        else if (opcao == 6) {
-            string nomeArquivo;
-            cout << "\nDigite o nome do arquivo: ";
-            cin >> nomeArquivo;
-            g.generatePNG(nomeArquivo);
         } 
         else if (opcao == 0) {
             cout << "\nPrograma encerrado\n";
