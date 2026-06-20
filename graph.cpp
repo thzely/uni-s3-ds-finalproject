@@ -10,7 +10,6 @@
 #include<queue>
 
 
-
 namespace graph{
 
     class digraph{
@@ -244,7 +243,7 @@ namespace graph{
           void printarMenorCaminho(const std::string& from, const std::string& to){
             auto caminho = shortestPath(from, to);
             if(caminho.empty()){
-              std::cout<< "caminho nao encontrado\n";
+              std::cout<< "Caminho não encontrado!\n";
               return; 
             }
             for(size_t i=0; i<caminho.size(); i++){
@@ -255,7 +254,60 @@ namespace graph{
             std::cout << "\n";
 
           }
-          
+
+          int diameter(){
+            int max_diam = 0;
+            for (auto& [start_node, nd] : nodes) {
+              std::unordered_map<node*, int> dist;
+              std::queue<node*> q;
+              auto p = &nd;
+              q.push(p);
+              dist[p] = 0;
+              while (!q.empty()) {
+                auto curr = q.front();
+                q.pop();
+                for (auto& viz : curr->links) {
+                  if (dist.count(viz) == 0) {
+                    dist[viz] = dist[curr] + 1;
+                    max_diam = std::max(max_diam, dist[viz]);
+                    q.push(viz);
+                  }
+                }
+              }
+            }
+            return max_diam;
+          }
+
+          void getCriticalRouters(){
+            std::vector<std::pair<std::string, size_t>> degrees;
+            for(auto& [key, nd] : nodes) {
+                degrees.push_back({key, degree(key)});
+            }
+
+            std::sort(degrees.begin(), degrees.end(), [](auto& a, auto& b){
+                return a.second > b.second;
+            });
+
+            std::cout << "\nTop 5 Roteadores Críticos (Por volume de conexões)\n";
+            for(size_t i = 0; i < std::min<size_t>(5, degrees.size()); i++){
+                std::cout << i+1 << ". IP: " << degrees[i].first << " | Grau total: " << degrees[i].second << "\n";
+            }
+          }
+
+          void generatePDF(const std::string& filename = "grafo.pdf"){
+            export2dot("temp_graph.dot");
+            std::string cmd = "dot -Tpdf temp_graph.dot -o " + filename;
+            std::system(cmd.c_str());
+            std::cout << "Arquivo " << filename << " gerado com sucesso!\n";
+          }
+
+          void generatePNG(const std::string& filename = "grafo.png"){
+            export2dot("temp_graph.dot");
+            std::string cmd = "dot -Tpng temp_graph.dot -o " + filename;
+            std::system(cmd.c_str());
+            std::cout << "Arquivo " << filename << " gerado com sucesso!\n";
+          }
+
     }; // fim da classe digraph
 
 } //fim do namespace

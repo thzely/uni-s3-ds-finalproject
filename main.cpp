@@ -59,7 +59,59 @@ int main(int argc, char* argv[]) {
     cout << "Grafo carregado com sucesso!\n";
     cout << "Vertices unicos : " << g.size()  << "\n";
     cout << "Arestas inseridas: " << g.edges() << "\n";
-    g.printarMenorCaminho("217.85.238.118", "62.155.246.229");
-    g.draw();
+
+    int opcao;
+    do {
+        cout << "\n------ MENU ------\n";
+        cout << "1. Exibir grafo completo\n";
+        cout << "2. Encontrar menor caminho\n";
+        cout << "3. Calcular o diâmetro do grafo\n";
+        cout << "4. Identificar roteadores críticos\n";
+        cout << "5. Gerar PDF do grafo\n";
+        cout << "6. Gerar PNG do grafo\n";
+        cout << "0. Sair\n";
+        cout << "Escolha uma opção: ";
+        cin >> opcao;
+
+        if(opcao == 1) {
+            cout << "\nExibindo grafo:\n";
+            g.draw();
+        } 
+        else if (opcao == 2) {
+            string from, to;
+            cout << "\nDigite o IP de origem: "; 
+            cin >> from;
+            cout << "Digite o IP de destino: "; 
+            cin >> to;
+            cout << "\nCaminho: ";
+            g.printarMenorCaminho(from, to);
+        } 
+        else if (opcao == 3) {
+            int diam = g.diameter();
+            cout << "O diâmetro do grafo é: " << diam << "\n";
+        } 
+        else if (opcao == 4) {
+            g.getCriticalRouters();
+        } 
+        else if (opcao == 5) {
+            string nomeArquivo;
+            cout << "\nDigite o nome do arquivo: ";
+            cin >> nomeArquivo;
+            g.generatePDF(nomeArquivo);
+        } 
+        else if (opcao == 6) {
+            string nomeArquivo;
+            cout << "\nDigite o nome do arquivo: ";
+            cin >> nomeArquivo;
+            g.generatePNG(nomeArquivo);
+        } 
+        else if (opcao == 0) {
+            cout << "\nPrograma encerrado\n";
+        } 
+        else {
+            cout << "\nOpção inválida! Tente novamente.\n";
+        }
+    } while (opcao != 0);
+
     return 0;
 }
