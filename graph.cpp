@@ -246,6 +246,7 @@ namespace graph{
               std::cout<< "Caminho não encontrado!\n";
               return; 
             }
+            std::cout << "Caminho encontrado (" << caminho.size() - 1 << " saltos):\n";
             for(size_t i=0; i<caminho.size(); i++){
               std::cout << caminho[i];
               if(i+1 < caminho.size())
@@ -296,18 +297,68 @@ namespace graph{
 
           void generatePDF(const std::string& filename = "grafo.pdf"){
             export2dot("temp_graph.dot");
-            std::string cmd = "dot -Tpdf temp_graph.dot -o " + filename;
+            std::string cmd = "dot -Tpdf temp_graph.dot -o " + filename + ".pdf";
             std::system(cmd.c_str());
             std::cout << "Arquivo " << filename << " gerado com sucesso!\n";
           }
 
           void generatePNG(const std::string& filename = "grafo.png"){
             export2dot("temp_graph.dot");
-            std::string cmd = "dot -Tpng temp_graph.dot -o " + filename;
+            std::string cmd = "dot -Tpng temp_graph.dot -o " + filename + ".png";
             std::system(cmd.c_str());
             std::cout << "Arquivo " << filename << " gerado com sucesso!\n";
           }
 
+          void export2dot(const std::vector<std::string>& caminho, const std::string& filename){
+            std::unordered_set<std::string> nosDestacados(caminho.begin(), caminho.end());
+            std::unordered_set<std::string> arestasDestacadas;
+            for(size_t i = 0; i + 1 < caminho.size(); i++)
+                arestasDestacadas.insert(caminho[i] + "->" + caminho[i+1]);
+
+            std::ofstream dot(filename);
+            dot << "digraph{\n";
+
+            for(auto& [key, nd] : nodes){
+                dot << "\t\"" << key << "\"";
+                if(nosDestacados.count(key)){
+                  if(key == caminho.front() || key == caminho.back())
+                      dot << " [style=filled, fillcolor=\"#7B2FBE\"]";
+                  else
+                      dot << " [style=filled, fillcolor=\"#4A90D9\"]";
+                }
+                dot << ";\n";
+            }
+
+            for(auto& [key, nd] : nodes){
+                for(auto viz : nd.links){
+                    std::string aresta = key + "->" + viz->value;
+                    dot << "\t\"" << key << "\" -> \"" << viz->value << "\"";
+                    if(arestasDestacadas.count(aresta))
+                        dot << " [color=\"#7B2FBE\", penwidth=2.0]";
+                    dot << ";\n";
+                }
+            }
+            dot << "}\n";
+          }
+
+          void generatePNGShortestPath(const std::string& from, const std::string& to, const std::string& filename){
+            auto caminho = shortestPath(from, to);
+            if(caminho.empty()){ std::cout << "Caminho não encontrado!\n"; return; }
+            export2dot(caminho, "temp_path.dot");
+            std::string cmd = "dot -Tpng temp_path.dot -o " + filename + ".png";
+            std::system(cmd.c_str());
+            std::cout << "Arquivo " << filename << ".png gerado!\n";
+          }
+
+        
+        void generatePDFShortestPath(const std::string& from, const std::string& to, const std::string& filename){
+            auto caminho = shortestPath(from, to);
+            if(caminho.empty()){ std::cout << "Caminho não encontrado!\n"; return; }
+            export2dot(caminho, "temp_path.dot");
+            std::string cmd = "dot -Tpdf temp_path.dot -o " + filename + ".pdf";
+            std::system(cmd.c_str());
+            std::cout << "Arquivo " << filename << ".pdf gerado!\n";
+          }
     }; // fim da classe digraph
 
 } //fim do namespace
