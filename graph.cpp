@@ -282,16 +282,16 @@ namespace graph{
           void getCriticalRouters(){
             std::vector<std::pair<std::string, size_t>> degrees;
             for(auto& [key, nd] : nodes) {
-                degrees.push_back({key, degree(key)});
+                degrees.push_back({key, indegree(key)});
             }
 
             std::sort(degrees.begin(), degrees.end(), [](auto& a, auto& b){
                 return a.second > b.second;
             });
 
-            std::cout << "\nTop 5 Roteadores Críticos (Por volume de conexões)\n";
+            std::cout << "\nTop 5 Roteadores Críticos (Maior in-degree)\n";
             for(size_t i = 0; i < std::min<size_t>(5, degrees.size()); i++){
-                std::cout << i+1 << ". IP: " << degrees[i].first << " | Grau total: " << degrees[i].second << "\n";
+                std::cout << i+1 << ". IP: " << degrees[i].first << " |In-degrees: " << degrees[i].second << "\n";
             }
           }
 
