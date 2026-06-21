@@ -107,9 +107,14 @@ int main(int argc, char* argv[]) {
             cin >> from;
             cout << "Digite o IP de destino: "; 
             cin >> to;
-            cout << "\nCaminho: ";
-            g.printarMenorCaminho(from, to);
+            auto caminho = g.shortestPath(from, to);
+            
+            if (caminho.empty()) {
+                cout << "\nCaminho não encontrado!\n";
+                continue;
+            }
 
+            g.printarMenorCaminho(from, to);
             menuFormato(g, nomeBase, from, to);
         } 
         else if (opcao == 3) {
