@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 
     string caminhoArquivo = argv[1];
     ifstream traceroute(caminhoArquivo);
-    string nomeBase = filesystem::path(caminhoArquivo).filename().string();
+    string nomeBase = filesystem::path(caminhoArquivo).stem().string();
     if (!traceroute) {
         cerr << "Falha ao abrir o arquivo: " << caminhoArquivo << "\n";
         return 1;
